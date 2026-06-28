@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Not bundled in the published skill — kept in the development source only.
+# (demo/screenshots/*.png ARE committed: the README gallery references them.)
+demo/demo.html
+demo/capture-screenshots.mjs
+evals/
+package.json
+package-lock.json
+
+# Playwright
+/test-results/
+/playwright-report/
+.cache/
+
+# OS / editor / local agent config
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.claude/

@@ -1,0 +1,183 @@
+/* =============================================================================
+   prototype-sketching-skill — sketch-skin.css
+   A reversible, non-destructive "hand-drawn" skin for any web app.
+
+   Activate with two attributes on <html>:
+     <html data-sketch="balsamiq" data-sketch-level="50">
+
+   styles : balsamiq | sharpie | pencil | doodle | blueprint
+   levels : 0 | 25 | 50 | 75 | 100   (selects an SVG filter from sketch-filters.html)
+
+   This file only RESTYLES. It never changes layout flow, behavior, or markup.
+   Remove the two data-sketch* attributes to fully disable.
+   ============================================================================= */
+
+/* ---- Handwritten fonts (online). For offline use see assets/fonts/README.md ---- */
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Permanent+Marker&family=Gaegu:wght@300;400;700&family=Short+Stack&family=Patrick+Hand&display=swap');
+
+/* =============================================================================
+   1. Base layer — shared by every style
+   ============================================================================= */
+[data-sketch] {
+  --sketch-ink:    #2b2b2b;   /* text colour            */
+  --sketch-stroke: #2b2b2b;   /* border / line colour   */
+  --sketch-paper:  #ffffff;   /* surface fill           */
+  --sketch-muted:  #f3f3f3;   /* secondary fill         */
+  --sketch-accent: #2b2b2b;   /* emphasis               */
+  --sketch-font:   'Patrick Hand', 'Comic Sans MS', cursive;
+  --sketch-border: 2px;
+  /* Classic CSS-only "hand-drawn rectangle" — asymmetric radii, no SVG needed.
+     This gives a wobbly box even at level 0 and never blurs text. */
+  --sketch-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+/* Font swap is the strongest "this is a sketch" signal and is filter-free,
+   so it never blurs. Applied broadly but only to text-bearing elements. */
+[data-sketch] :where(body, p, a, span, li, dt, dd, td, th, label, legend, caption,
+                     h1, h2, h3, h4, h5, h6, button, input, select, textarea,
+                     option, blockquote, figcaption, summary, code, kbd) {
+  font-family: var(--sketch-font) !important;
+  letter-spacing: .2px;
+}
+
+/* Flatten to a wireframe: kill shadows/gradients so nothing looks "finished".
+   Low-specificity :where + !important keeps this overridable by .no-sketch. */
+[data-sketch] :where(*) {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Hand-drawn boxes for common containers and form controls. */
+[data-sketch] :where(
+    button, .btn, [role="button"],
+    input:not([type="checkbox"]):not([type="radio"]), select, textarea, fieldset,
+    table, th, td,
+    .card, [class*="card"], .panel, [class*="panel"], .box, .tile,
+    blockquote, pre, dialog, .modal, [role="dialog"]) {
+  border: var(--sketch-border) solid var(--sketch-stroke) !important;
+  border-radius: var(--sketch-radius) !important;
+  background: var(--sketch-paper) !important;
+  color: var(--sketch-ink) !important;
+}
+
+[data-sketch] :where(hr) {
+  border: none !important;
+  border-top: var(--sketch-border) solid var(--sketch-stroke) !important;
+  border-radius: var(--sketch-radius) !important;
+}
+
+[data-sketch] :where(a) { color: var(--sketch-accent) !important; text-decoration-style: wavy !important; }
+[data-sketch] :where(button, .btn, [role="button"]) { cursor: pointer; }
+
+/* Desaturate raster/vector media so brand imagery reads as placeholder art.
+   (Images are intentionally NOT wobbled — that would fight this filter.) */
+[data-sketch] :where(img, video, canvas) {
+  filter: grayscale(1) contrast(.95) !important;
+  opacity: .9;
+}
+
+/* =============================================================================
+   2. Sketchiness ramp — selects an SVG displacement filter by level.
+      The filters live in assets/sketch-filters.html (must be in the DOM).
+      Applied to box decoration / controls only — never to text or <body>.
+   ============================================================================= */
+[data-sketch] {
+  --sketch-wobble: none; /* level 0 default: steady lines */
+}
+[data-sketch][data-sketch-level="25"]                 { --sketch-wobble: url(#sketch-25);  }
+[data-sketch][data-sketch-level="50"]                 { --sketch-wobble: url(#sketch-50);  }
+[data-sketch][data-sketch-level="75"]                 { --sketch-wobble: url(#sketch-75);  }
+[data-sketch][data-sketch-level="100"]                { --sketch-wobble: url(#sketch-100); }
+/* If a style is set but no level given, default to a moderate wobble. */
+[data-sketch]:not([data-sketch-level])                { --sketch-wobble: url(#sketch-50);  }
+
+[data-sketch] :where(
+    button, .btn, [role="button"],
+    input:not([type="checkbox"]):not([type="radio"]), select, textarea, fieldset,
+    table, .card, [class*="card"], .panel, [class*="panel"], .box, .tile,
+    blockquote, pre, dialog, .modal, [role="dialog"], hr, svg) {
+  filter: var(--sketch-wobble);
+}
+
+/* =============================================================================
+   3. Per-style palettes & fonts
+   ============================================================================= */
+
+/* --- Balsamiq: clean greyscale wireframe ---------------------------------- */
+[data-sketch="balsamiq"] {
+  --sketch-font:   'Balsamiq Sans', cursive;
+  --sketch-ink:    #3a3a3a;
+  --sketch-stroke: #3a3a3a;
+  --sketch-paper:  #ffffff;
+  --sketch-muted:  #eeeeee;
+  --sketch-accent: #3a3a3a;
+  --sketch-border: 2px;
+}
+[data-sketch="balsamiq"] :where(body) { background: #fafafa !important; color: var(--sketch-ink) !important; }
+
+/* --- Sharpie: bold black marker ------------------------------------------- */
+[data-sketch="sharpie"] {
+  --sketch-font:   'Permanent Marker', 'Patrick Hand', cursive;
+  --sketch-ink:    #141414;
+  --sketch-stroke: #141414;
+  --sketch-paper:  #ffffff;
+  --sketch-muted:  #ededed;
+  --sketch-accent: #141414;
+  --sketch-border: 3px;
+}
+[data-sketch="sharpie"] :where(body) { background: #ffffff !important; color: var(--sketch-ink) !important; }
+
+/* --- Pencil: light graphite ----------------------------------------------- */
+[data-sketch="pencil"] {
+  --sketch-font:   'Gaegu', cursive;
+  --sketch-ink:    #4a4a4a;
+  --sketch-stroke: #6f6f6f;
+  --sketch-paper:  #fcfcfa;
+  --sketch-muted:  #f0efea;
+  --sketch-accent: #5a5a5a;
+  --sketch-border: 2px;
+}
+[data-sketch="pencil"] :where(body) { background: #fbfbf7 !important; color: var(--sketch-ink) !important; }
+[data-sketch="pencil"] :where(img, video, canvas) { filter: grayscale(1) brightness(1.05) !important; opacity: .8; }
+
+/* --- Doodle: playful, light colour ---------------------------------------- */
+[data-sketch="doodle"] {
+  --sketch-font:   'Short Stack', cursive;
+  --sketch-ink:    #222222;
+  --sketch-stroke: #222222;
+  --sketch-paper:  #fffef7;
+  --sketch-muted:  #fff7d6;
+  --sketch-accent: #ff5b5b;
+  --sketch-border: 2.5px;
+}
+[data-sketch="doodle"] :where(body) { background: #fffdf3 !important; color: var(--sketch-ink) !important; }
+[data-sketch="doodle"] :where(a) { color: #2b8aef !important; }
+[data-sketch="doodle"] :where(img, video, canvas) { filter: grayscale(.3) saturate(1.1) !important; opacity: .92; }
+
+/* --- Blueprint: white ink on blue paper ----------------------------------- */
+[data-sketch="blueprint"] {
+  --sketch-font:   'Patrick Hand', cursive;
+  --sketch-ink:    #eaf3ff;
+  --sketch-stroke: #cfe3ff;
+  --sketch-paper:  #0d3f93;
+  --sketch-muted:  #0e419a;
+  --sketch-accent: #ffffff;
+  --sketch-border: 2px;
+}
+[data-sketch="blueprint"] :where(body) { background: #0b3a86 !important; color: var(--sketch-ink) !important; }
+[data-sketch="blueprint"] :where(img, video, canvas) {
+  filter: grayscale(1) brightness(1.5) sepia(1) hue-rotate(180deg) saturate(2) !important;
+  opacity: .65;
+}
+
+/* =============================================================================
+   4. Opt-out — keep a specific asset crisp (apply class only when asked)
+   ============================================================================= */
+[data-sketch] .no-sketch,
+[data-sketch] [data-no-sketch],
+[data-sketch] .no-sketch * {
+  filter: none !important;
+  font-family: inherit !important;
+  border-radius: revert !important;
+  opacity: 1 !important;
+}
