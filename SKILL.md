@@ -60,6 +60,24 @@ Make a *working* web app **look** hand-drawn so clients see it is a prototype, n
 
 If `data-sketch` is set but `data-sketch-level` is omitted, the skin defaults to level `50`.
 
+## Diagonal watermark (optional)
+
+To stamp the whole screen as a draft, add a third `<html>` attribute with the text to show:
+
+```html
+<html data-sketch="balsamiq" data-sketch-level="50" data-sketch-watermark="DRAFT">
+```
+
+`data-sketch-watermark` paints one faint, hand-lettered word diagonally across the viewport. It is a fixed, non-interactive layer (`pointer-events: none`), so it never blocks clicks, never changes layout, and stays in place across page and route changes. Any text works (`DRAFT`, `PROTOTYPE`, `CONFIDENTIAL`, a client name…). Remove the attribute to turn it off. With the overlay, a **Watermark** text field sets it live.
+
+## Modals, popups & SPA navigation
+
+Because the skin is activated by attributes on `<html>` and styled with global `[data-sketch] …` selectors, anything that appears **after** activation inherits it automatically — dialogs, popovers, dropdown menus, tooltips and toasts (including portal-mounted ones), and every screen you navigate to in a single-page app. There is nothing to wire per component or per route.
+
+Two things keep it consistent:
+- The selector lists already cover `dialog`, `[popover]`, `[role="dialog"]`, `[aria-modal="true"]`, `.modal`, `.popover`, menus, tooltips and toasts, plus the native `::backdrop`.
+- The overlay script watches `<body>` and **re-injects the SVG filters** if a framework replaces the body on a route change, so the wobble never silently drops. (With the static-attribute model, paste `sketch-filters.html` once after `<body>`; SPA frameworks mount into a child root and leave it intact.)
+
 ## Framework injection recipes
 
 The skin is framework-agnostic. These are the exact targets; full details in `references/implementation.md`.
@@ -91,10 +109,11 @@ the overlay instead of static attributes:
    ```html
    <script src="sketch-toggle.js" defer></script>
    ```
-3. Done. The script renders a floating panel with **OFF + one radio per theme**
-   and a **0–100% sketchiness slider**, flips the `<html>` attributes live, and
-   remembers the choice in `localStorage`. It **auto-injects the SVG filters**, so
-   step 5 of Quick start (pasting `sketch-filters.html`) is not needed.
+3. Done. The script renders a floating panel with **OFF + one radio per theme**,
+   a **0–100% sketchiness slider**, and a **watermark text field**, flips the
+   `<html>` attributes live, and remembers the choice in `localStorage`. It
+   **auto-injects the SVG filters** (and re-injects them if an SPA replaces the
+   body), so step 5 of Quick start (pasting `sketch-filters.html`) is not needed.
 
 This is still skin-only and non-destructive — the script just sets attributes.
 Remove the tag to disable. Choose this model when the request is "let me/the

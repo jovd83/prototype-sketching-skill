@@ -47,17 +47,33 @@
   text-shadow: none !important;
 }
 
-/* Hand-drawn boxes for common containers and form controls. */
+/* Hand-drawn boxes for common containers and form controls.
+   The modal/popup/menu selectors are deliberately broad: dialogs, popovers,
+   menus, dropdowns, tooltips and toasts are usually mounted lazily (often in a
+   portal at the end of <body>) when the user opens them. Because every selector
+   here is scoped under [data-sketch] on <html>, those elements inherit the skin
+   the moment they appear — no per-component wiring, and it survives SPA route
+   changes since the <html> attributes persist. */
 [data-sketch] :where(
     button, .btn, [role="button"],
     input:not([type="checkbox"]):not([type="radio"]), select, textarea, fieldset,
     table, th, td,
     .card, [class*="card"], .panel, [class*="panel"], .box, .tile,
-    blockquote, pre, dialog, .modal, [role="dialog"]) {
+    blockquote, pre,
+    dialog, [popover], .modal, [class*="modal"], [role="dialog"], [aria-modal="true"],
+    .popover, [class*="popover"], .dropdown, [class*="dropdown"], [class*="menu"],
+    [role="menu"], [role="listbox"], [role="tooltip"], .tooltip, .toast, .snackbar) {
   border: var(--sketch-border) solid var(--sketch-stroke) !important;
   border-radius: var(--sketch-radius) !important;
   background: var(--sketch-paper) !important;
   color: var(--sketch-ink) !important;
+}
+
+/* The backdrop behind native <dialog> / popovers reads as a soft sketch wash
+   instead of a glossy production scrim. */
+[data-sketch] :where(dialog, [popover])::backdrop {
+  background: rgba(20, 20, 20, .35) !important;
+  backdrop-filter: none !important;
 }
 
 [data-sketch] :where(hr) {
@@ -95,8 +111,44 @@
     button, .btn, [role="button"],
     input:not([type="checkbox"]):not([type="radio"]), select, textarea, fieldset,
     table, .card, [class*="card"], .panel, [class*="panel"], .box, .tile,
-    blockquote, pre, dialog, .modal, [role="dialog"], hr, svg) {
+    blockquote, pre,
+    dialog, [popover], .modal, [class*="modal"], [role="dialog"], [aria-modal="true"],
+    .popover, [class*="popover"], .dropdown, [class*="dropdown"], [class*="menu"],
+    [role="menu"], [role="listbox"], [role="tooltip"], .tooltip, .toast, .snackbar,
+    hr, svg) {
   filter: var(--sketch-wobble);
+}
+
+/* =============================================================================
+   2b. Diagonal "prototype" watermark (opt-in)
+   Activate by adding data-sketch-watermark on <html> with the text to show:
+       <html data-sketch="balsamiq" data-sketch-watermark="DRAFT">
+   It paints one faint, hand-lettered word across the viewport at a diagonal so
+   the whole screen reads as a draft. It is a fixed, non-interactive layer
+   (pointer-events:none) that never blocks clicks and never alters layout, and it
+   stays put across page/route changes because it hangs off the <html> element.
+   Remove the attribute to turn it off. The overlay panel can set it live.
+   ============================================================================= */
+[data-sketch][data-sketch-watermark]::before {
+  content: attr(data-sketch-watermark);
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;          /* above app content, below the controls panel */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;          /* never intercepts clicks */
+  font-family: var(--sketch-font);
+  font-weight: 700;
+  font-size: 16vw;
+  line-height: 1;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  transform: rotate(-30deg);
+  color: var(--sketch-stroke);
+  opacity: .08;
+  user-select: none;
 }
 
 /* =============================================================================

@@ -1,5 +1,12 @@
 # Prototype Sketching Skill ✏️
 
+[![version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
+[![status](https://img.shields.io/badge/status-stable-3fb950)](SKILL.md)
+[![category](https://img.shields.io/badge/category-design-0a7ea4)](SKILL.md)
+[![validation](https://img.shields.io/badge/validation-GitHub%20Actions-2088ff)](.github/workflows/validate.yml)
+[![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/jovd83)
+
 > Make a **working** Angular / React / Vue / static web app **look** hand-sketched
 > — so clients instantly understand they are seeing a *prototype*, not the
 > finished product, and stop asking "why do you need to rebuild it for production?"
@@ -57,8 +64,8 @@ Framework-specific recipes (Angular / React / Vue) are in
 ## Interactive overlay
 
 Add one script tag and your client gets a floating control panel — **OFF + one
-radio per theme** and a **0–100% sketchiness slider** — that switches the look
-live, with the choice remembered across reloads:
+radio per theme**, a **0–100% sketchiness slider**, and a **watermark text
+field** — that switches the look live, with the choice remembered across reloads:
 
 ```html
 <script src="assets/sketch-toggle.js" defer></script>
@@ -66,6 +73,33 @@ live, with the choice remembered across reloads:
 
 It auto-injects the SVG filters and only flips the `<html>` attributes, so it is
 just as non-destructive as the static approach. Remove the tag to disable.
+
+---
+
+## Diagonal watermark
+
+Stamp the whole screen as a draft with a third `<html>` attribute:
+
+```html
+<html data-sketch="balsamiq" data-sketch-level="50" data-sketch-watermark="DRAFT">
+```
+
+`data-sketch-watermark` paints one faint, hand-lettered word diagonally across
+the viewport. It is fixed and non-interactive (`pointer-events: none`), so it
+never blocks clicks or shifts layout. Any text works; remove the attribute to
+turn it off, or set it live from the overlay's **Watermark** field.
+
+---
+
+## Modals, popups & SPA navigation
+
+Because the skin is activated on `<html>` with global `[data-sketch] …`
+selectors, anything that appears **after** activation inherits it automatically —
+dialogs, popovers, dropdown menus, tooltips and toasts (including portal-mounted
+ones, with a styled native `::backdrop`), and every screen you navigate to in a
+single-page app. Nothing to wire per component or per route. The overlay also
+re-injects the SVG filters if a framework swaps out `<body>` on navigation, so
+the wobble never silently drops.
 
 ---
 

@@ -121,14 +121,47 @@ font swap, radius and desaturation from it and its children. The overlay panel
 itself uses this class. Only add it to markup when the user explicitly asks to
 protect a logo/chart — it is the one permitted markup change.
 
-## 7. Reverting completely
+## 7. Diagonal watermark
+
+`data-sketch-watermark="TEXT"` on `<html>` turns on a draft stamp. It is a single
+`html::before` pseudo-element: `position: fixed; inset: 0`, the text from
+`attr(data-sketch-watermark)`, rotated `-30deg`, low `opacity`, and
+`pointer-events: none` so it never intercepts clicks or shifts layout. It uses the
+active style's font and stroke colour, so it adapts per theme (light ink on the
+blueprint's blue paper, dark ink elsewhere). Because it hangs off `<html>`, it
+stays fixed across route changes. To tile it instead of one big word, replace the
+pseudo-element background with a repeating SVG data-URI (the overlay script is the
+right place to generate one from arbitrary text). Tune `opacity`/`font-size`/angle
+in `sketch-skin.css` section 2b.
+
+## 8. Modals, popups & SPA persistence
+
+The skin keys off `[data-sketch]` on `<html>` with global selectors, so lazily
+mounted UI (dialogs, popovers, menus, tooltips, toasts — including portal mounts
+at the end of `<body>`) and every SPA route inherit it automatically. Coverage
+lives in two selector lists in `sketch-skin.css` (the box-styling block and the
+wobble block); both include `dialog, [popover], [role="dialog"],
+[aria-modal="true"], .modal, .popover, .dropdown, [role="menu"],
+[role="listbox"], [role="tooltip"], .tooltip, .toast`, plus a `::backdrop` rule.
+If a component library uses an unusual wrapper class, add it to both lists (same
+pattern as the `.mat-card` / `.ant-btn` note below).
+
+One edge case: a framework that **replaces the whole `<body>`** on navigation can
+drop the injected SVG filter defs. The overlay script guards against this with a
+`MutationObserver` on `<body>` that calls `ensureFilters()` again if `#sketch-50`
+disappears. With the static-attribute model there is no observer, but mainstream
+SPA frameworks (Angular, React, Vue) mount into a child root and leave the pasted
+`sketch-filters.html` untouched, so the defs survive.
+
+## 9. Reverting completely
 
 - **Overlay model**: choose **OFF** in the panel, or remove the `<script>` tag.
-- **Static model**: delete `data-sketch` and `data-sketch-level` from `<html>`.
+- **Static model**: delete `data-sketch`, `data-sketch-level` and
+  `data-sketch-watermark` from `<html>`.
 - The appended CSS and SVG defs are inert without the attributes, so they can be
   left in place between demos with zero visual effect.
 
-## 8. Known limitations
+## 10. Known limitations
 
 - Icon fonts and some CSS sprite techniques can look odd under the flatten
   rules; wrap the icon container in `.no-sketch` if needed.

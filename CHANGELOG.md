@@ -14,6 +14,30 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
+## [1.1.0] — 2026-06-29
+
+### Added
+- **Diagonal "prototype" watermark** (opt-in): set `data-sketch-watermark="TEXT"`
+  on `<html>` to stamp a faint, hand-lettered word diagonally across the
+  viewport. Non-interactive (`pointer-events: none`), reversible, and adapts to
+  the active style. The interactive overlay gains a **Watermark** text field to
+  set it live (and a `?watermark=` URL parameter for headless capture).
+- **CI validation**: `.github/workflows/validate.yml` runs
+  `scripts/validate_skill.py` on every push / pull request, backing the new
+  validation badge. README now carries version / status / category / validation /
+  license / support badges.
+
+### Changed
+- **Modals, popups and SPA navigation now stay in the sketch look.** The
+  box-styling and wobble selector lists were broadened to cover `dialog`,
+  `[popover]`, `[role="dialog"]`, `[aria-modal="true"]`, `.modal`, `.popover`,
+  dropdowns, menus, tooltips and toasts (including portal-mounted ones), plus a
+  styled native `::backdrop`. Because activation is on `<html>`, lazily mounted
+  UI and every SPA route inherit the skin automatically.
+- The overlay script now watches `<body>` and re-injects the SVG filters if a
+  framework replaces the body on a route change, so the wobble never silently
+  drops mid-session.
+
 ## [1.0.0] — 2026-06-28
 
 Initial public release.
