@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 SKILL_NAME = "prototype-sketching-skill"
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 REQUIRED_FILES = [
     "SKILL.md",
@@ -88,7 +88,7 @@ def main() -> int:
         for needle, label in [
             (f"version-{VERSION}-", "version badge matching the current version"),
             ("Buy%20Me%20a%20Coffee", "Buy Me a Coffee badge"),
-            ("validation-GitHub%20Actions", "validation badge"),
+            ("actions/workflows/validate.yml/badge.svg", "live GitHub Actions validation badge"),
             ("badge/license-MIT", "license badge"),
         ]:
             if needle not in readme:

@@ -1,9 +1,9 @@
 # Prototype Sketching Skill ✏️
 
-[![version](https://img.shields.io/badge/version-1.1.0-blue)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-1.1.1-blue)](CHANGELOG.md)
 [![status](https://img.shields.io/badge/status-stable-3fb950)](SKILL.md)
 [![category](https://img.shields.io/badge/category-design-0a7ea4)](SKILL.md)
-[![validation](https://img.shields.io/badge/validation-GitHub%20Actions-2088ff)](.github/workflows/validate.yml)
+[![validation](https://github.com/jovd83/prototype-sketching-skill/actions/workflows/validate.yml/badge.svg)](https://github.com/jovd83/prototype-sketching-skill/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/jovd83)
 
@@ -89,6 +89,8 @@ the viewport. It is fixed and non-interactive (`pointer-events: none`), so it
 never blocks clicks or shifts layout. Any text works; remove the attribute to
 turn it off, or set it live from the overlay's **Watermark** field.
 
+![Diagonal DRAFT watermark with a sketched dropdown menu open](demo/screenshots/feature-watermark.png)
+
 ---
 
 ## Modals, popups & SPA navigation
@@ -100,6 +102,8 @@ ones, with a styled native `::backdrop`), and every screen you navigate to in a
 single-page app. Nothing to wire per component or per route. The overlay also
 re-injects the SVG filters if a framework swaps out `<body>` on navigation, so
 the wobble never silently drops.
+
+![A native dialog rendered in the Sharpie style with the sketch backdrop](demo/screenshots/feature-modal.png)
 
 ---
 

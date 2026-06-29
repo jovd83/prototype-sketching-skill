@@ -14,6 +14,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
+## [1.1.1] — 2026-06-29
+
+### Changed
+- The README **validation badge** now shows this repository's own live GitHub
+  Actions status (`actions/workflows/validate.yml/badge.svg`) instead of a static
+  placeholder, so it reflects the real result of the skill's own validation
+  workflow.
+
+### Added
+- Gallery screenshots for the 1.1.0 features:
+  `demo/screenshots/feature-watermark.png` (the diagonal `DRAFT` watermark with a
+  sketched dropdown menu) and `demo/screenshots/feature-modal.png` (a native
+  `<dialog>` in the Sharpie style with the sketch `::backdrop`), now shown in the
+  README. The bundled demo (`demo/demo.html`) gained an interactive account
+  dropdown and a confirmation dialog so the modal/popup coverage is exercised.
+
 ## [1.1.0] — 2026-06-29
 
 ### Added
